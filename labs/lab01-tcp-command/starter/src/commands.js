@@ -12,6 +12,11 @@ export function handleCommand(line) {
         case "ECHO":
             return argument;
 
+        case "UPPER":
+            return argument.toUpperCase();
+        
+        case "LOWER":
+            return argument.toLowerCase();
         // TODO: implement UPPER
         // Example:
         // UPPER hello -> HELLO
