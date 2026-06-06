@@ -17,22 +17,7 @@ export function handleCommand(line) {
         
         case "LOWER":
             return argument.toLowerCase();
-        // TODO: implement UPPER
-        // Example:
-        // UPPER hello -> HELLO
-
-        // TODO: implement LOWER
-        // Example:
-        // LOWER HELLO -> hello
-
-        // TODO: implement REVERSE
-        // Example:
-        // REVERSE hello -> olleh
-
-        // TODO: implement TIME
-        // Example:
-        // TIME -> current server time
-
+            
         case "QUIT":
             return "Goodbye.";
 
