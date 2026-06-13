@@ -38,11 +38,86 @@ export function readJsonBody(req) {
 }
 
 export function handleCalculate(body) {
-    // TODO: Validate that operation, a, and b are present.
-    // TODO: Validate that a and b are numbers.
-    // TODO: Support add, subtract, multiply, and divide.
-    // TODO: Return an error for unsupported operations.
-    // TODO: Return an error for division by zero.
+    if (
+        body.operation === undefined ||
+        body.a === undefined ||
+        body.b === undefined
+    ) {
+        return {
+            statusCode: 400,
+            response: {
+                error: "Missing required fields"
+            }
+        };
+    }
+
+    if (typeof body.a != "number" || typeof body.b != "number") {
+        return {
+            statusCode: 400,
+            response: {
+                error: "a and b must be numbers"
+            }
+        };
+    }
+
+    if (body.operation === "add") {
+        return {
+            statusCode: 200,
+            response: {
+                result: body.a + body.b
+            }
+        };
+    }
+
+    if (body.operation === "subtract") {
+        return {
+            statusCode: 200,
+            response: {
+                result: body.a - body.b
+            }
+        };
+    }
+
+    if (body.operation === "multiply") {
+        return {
+            statusCode: 200,
+            response: {
+                result: body.a * body.b
+            }
+        };
+    }
+
+    if (body.operation === "divide") {
+        if (body.b === 0) {
+            return {
+                statusCode: 400,
+                response: {
+                    error: "Division by zero is not allowed"
+                }
+            };
+        }
+
+        return {
+            statusCode: 200,
+            response: {
+                result: body.a / body.b
+            }
+        };
+    }
+
+    if (
+        body.operation !== "add" &&
+        body.operation !== "subtract" &&
+        body.operation !== "multiply" &&
+        body.operation !== "divide"
+    ) {
+        return {
+            statusCode: 400,
+            response: {
+                error: "That operation is not supported"
+            }
+        };
+    }
 
     return {
         statusCode: 501,
@@ -64,8 +139,7 @@ export async function requestHandler(req, res) {
     }
 
     if (method === "GET" && url === "/requests") {
-        // TODO: Return the current request count as JSON.
-        sendJson(res, 501, { error: "Request counter not implemented yet" });
+        sendJson(res, 200, { count: requestCount });
         return;
     }
 
@@ -73,8 +147,7 @@ export async function requestHandler(req, res) {
         try {
             const body = await readJsonBody(req);
 
-            // TODO: Return the parsed JSON body back to the client.
-            sendJson(res, 501, { error: "Echo not implemented yet" });
+            sendJson(res, 200, body );
         } catch {
             sendJson(res, 400, { error: "Invalid JSON" });
         }
@@ -106,11 +179,9 @@ export function resetState() {
     requestCount = 0;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-    const port = process.env.PORT || DEFAULT_PORT;
-    const server = createServer();
+const port = process.env.PORT || DEFAULT_PORT;
+const server = createServer();
 
-    server.listen(port, () => {
-        console.log(`HTTP JSON server listening on port ${port}`);
-    });
-}
+server.listen(port, () => {
+    console.log(`HTTP JSON server listening on port ${port}`);
+});
