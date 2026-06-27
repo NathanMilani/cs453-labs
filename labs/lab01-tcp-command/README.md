@@ -178,9 +178,17 @@ npm run test:watch
 Answer the following questions in your submission:
 
 1. What is the difference between the client and the server?
+My answer:
+- The client is an application or device (like a web browser or mobile app) that requests services. The server is a system (a computer or a cloud function) that listens for those requests, processes them, and returns the requested resources
 2. Why does the server need to keep running after handling one request?
+My answer:
+- A server operates as a non-terminating process. If a server shut down after completing a single task, it wouldn't be able to handle ongoing or future requests. It stays active and in a "listening" state to constantly serve multiple clients over time
 3. What happens if two clients connect at the same time?
+My Response:
+- Servers don't strictly put clients into a simple waiting queue to process one after another. Instead, they handle connections concurrently. The server assigns separate threads or processes to each request so they are handled simultaneously, giving the illusion that all clients are being listened to at the exact same time.
 4. How is this different from HTTP?
+My answer:
+-  HTTP is an application layer protocol, while TCP is a transport layer protocol. HTTP operates on top of TCP. TCP creates the continuous, reliable, and stateful connection, while HTTP determines the specific structure and meaning of the messages passed back and forth. HTTP itself is "stateless," meaning it doesn't remember previous requests, but modern HTTP setups often use "Keep-Alive" headers to keep the underlying connection open.
 
 ## Submission
 

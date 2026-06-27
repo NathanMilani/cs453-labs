@@ -1,4 +1,5 @@
 import express from "express";
+import { error } from "node:console";
 
 export function createApp() {
   const app = express();
@@ -16,34 +17,81 @@ export function createApp() {
   app.get("/health", (req, res) => {
     res.json({ status: "ok" });
   });
-
-  // TODO: Return all items.
-  app.get("/items", (req, res) => {
-    res.status(501).json({ error: "Not implemented yet" });
+    app.get("/items", (req, res) => {
+    res.json(items);
   });
-
-  // TODO: Return one item by ID.
+  
   app.get("/items/:id", (req, res) => {
-    res.status(501).json({ error: "Not implemented yet" });
+    const id = Number(req.params.id);
+
+    const item = items.find(item => item.id === id);
+
+    if (!item) {
+      return res.status(404).json({error: "Item not found"});
+    }
+    
+    res.json(item);
   });
 
-  // TODO: Create a new item.
   app.post("/items", (req, res) => {
-    res.status(501).json({ error: "Not implemented yet" });
-  });
+    const {name, quantity} = req.body;
 
-  // TODO: Update an existing item.
+    if (typeof name !== "string" || name.trim() === "" || typeof quantity !== "number" || quantity < 0) {
+      return res.status(400).json({error: "Invalid item data"});
+    }
+    
+    const newItem = {
+      id: nextId++,
+      name, quantity
+    };
+    
+    items.push(newItem);    
+    
+    res.status(201).json(newItem);
+  });
+  
   app.put("/items/:id", (req, res) => {
-    res.status(501).json({ error: "Not implemented yet" });
-  });
+    const id = Number(req.params.id);
 
-  // TODO: Delete an existing item.
-  app.delete("/items/:id", (req, res) => {
-    res.status(501).json({ error: "Not implemented yet" });
-  });
+    const item = items.find(item => item.id === id);
 
-  app.use((req, res) => {
-    res.status(404).json({ error: "Not found" });
+    if (!item) {
+      return res.status(404).json({error: "Item not found"});
+    }
+
+    const { name, quantity } = req.body;
+
+    if (
+      typeof name !== "string" ||
+      name.trim() === "" ||
+      typeof quantity !== "number" ||
+      quantity < 0) {
+      return res.status(400).json({
+      error: "Invalid item data"});
+    }
+
+    item.name = name;
+    item.quantity = quantity;
+
+    res.json(item);
+});
+
+app.delete("/items/:id", (req, res) => {
+  const id = Number(req.params.id);
+
+  const index = items.findIndex(item => item.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({error: "Item not found"});
+  }
+
+  items.splice(index, 1);
+
+  res.sendStatus(204);
+});
+
+app.use((req, res) => {
+  res.status(404).json({ error: "Not found" });
   });
 
   return app;
