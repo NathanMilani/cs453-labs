@@ -294,25 +294,36 @@ npm test
 Answer the following questions in your submission:
 
 1. What makes this API more "REST-like" than the previous HTTP/JSON lab?
+My answer:
+- This lab is using an API that follows a REST architecture by using the standard HTTP methods GET, POST, PUT, and DELETE to tell the
+  server what operation the client wants to perform. Instead of manually handling every HTTP request like in the previous lab, Express
+  makes organizing the routes much cleaner and simpler. Another difference is that this lab focuses on building the server-side API.
+  Instead of writing our own client program, we documented the API using the openapi.yaml file and tested it using automated tests and curl.
+  
 2. What is the purpose of a route parameter such as `/items/:id`?
+My answer:
+- The route parameter passes information to the server that tells it what specific resource the client is asking for. After the server
+  receives the request, it uses the value of the parameter to find the correct item and then sends it back to the client. For example,
+  if the client requests /items/1, the server knows it needs to retrieve the item whose ID is 1. This same idea can also be used when updating or deleting an item.
+
 3. Why should `POST`, `PUT`, and `DELETE` use different HTTP methods?
+My answer:
+- Each HTTP method has a different purpose. POST creates a new item or resource, such as adding a new employee to a database. PUT updates
+  an existing item or resource with new information, and DELETE removes an item or resource. Since each method performs a different action,
+  they should remain separate so the server knows exactly what operation the client wants to perform. It also keeps the API cleaner and easier to understand.
+
 4. What is the difference between a `400` error and a `404` error?
+My answer:
+- Both status codes indicate that something went wrong, but they mean different things. A 400 Bad Request means the client sent invalid
+  or incomplete data that the server cannot process. For example, the request might be missing required information or contain invalid values.
+  A 404 Not Found means the resource the client requested does not exist. A common example is requesting an item ID that isn't in the collection
+  or visiting a URL that doesn't exist.
+
 5. How does the OpenAPI file relate to your Express server code?
-
-## Graduate Students
-
-Graduate students should complete this additional feature:
-
-Add validation so:
-
-- `name` must be a non-empty string.
-- `quantity` must be a number greater than or equal to zero.
-- Invalid `POST /items` and `PUT /items/:id` requests return status code `400`.
-- Invalid requests return a JSON error response.
-
-Graduate students must also add automated tests for invalid input.
-
-Document your graduate extension in your README and in your reflection answers.
+My answer:
+- The OpenAPI file documents the Express server code by describing the routes, request bodies, response bodies, and HTTP status codes.
+  This allows other developers to understand how to use the API without having to read through the server code itself. It serves as
+  documentation for the system and should match what the Express server actually does.
 
 ## Submission
 
